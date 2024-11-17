@@ -8,11 +8,11 @@ def calculate_compression_degree(input_file_path: str, output_file_path: str) ->
     print(f"Объём исходного файла: {input_file_size} байт")
     output_file_size = os.path.getsize(output_file_path)
     print(f"Объём сжатого файла: {output_file_size} байт")
-    print(f"Коэффициент сжатия: {output_file_size / input_file_size}")
-    print(f"Эффективность сжатия: {(input_file_size - output_file_size) / input_file_size}")
+    print(f"Коэффициент сжатия: {input_file_size / output_file_size}")
+    print(f"Степень сжатия: {(input_file_size - output_file_size) / input_file_size}")
 
 
-input_file = "data/year_2004.csv"
+input_file = "data/2023-12-04 15-25-42.mkv"
 temp_file = input_file + "_temp.dat"
 compressed_file = input_file + "_compressed.dat"
 decompressed_file = input_file + "_decompressed.dat"

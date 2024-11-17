@@ -1,3 +1,7 @@
+# библиотеки используются тольк при подстёте эффективности у энтроптйного метода сжатия
+import math
+from collections import Counter
+
 class Node:
     def __init__(self, char, freq):
         self.char = char
@@ -57,6 +61,27 @@ class HEAPQ:
         return codebook
 
     @staticmethod
+    def calculate_entropy(data):
+        frequency = Counter(data)
+        total = sum(frequency.values())
+        entropy = -sum((freq / total) * math.log2(freq / total) for freq in frequency.values())
+        return entropy
+
+    @staticmethod
+    def calculate_average_code_length(data, codebook):
+        frequency = Counter(data)
+        total = sum(frequency.values())
+        avg_code_length = sum((freq / total) * len(codebook[char]) for char, freq in frequency.items())
+        return avg_code_length
+
+    @staticmethod
+    def calculate_efficiency(data, codes):
+        entropy = HEAPQ.calculate_entropy(data)
+        avg_code_length = HEAPQ.calculate_average_code_length(data, codes)
+        efficiency = entropy / avg_code_length
+        return efficiency
+
+    @staticmethod
     def compress_file(input_file, output_file):
         with open(input_file, 'rb') as file:
             data = file.read()
@@ -64,6 +89,8 @@ class HEAPQ:
         # Строим дерево Хаффмана и получаем коды
         tree = HEAPQ.build_huffman_tree(data)
         codes = HEAPQ.generate_codes(tree)
+
+        print(f"Эффективность у энтропийного метода: {HEAPQ.calculate_efficiency(data, codes)}")
 
         # Сжимаем данные
         compressed_data = ''.join(codes[byte] for byte in data)
